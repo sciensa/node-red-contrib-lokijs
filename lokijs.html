@@ -1,122 +1,122 @@
 <script type="text/javascript">
-    "use strict";
-    /*global RED*/
-    RED.nodes.registerType('lokijs-config', {
-        category: 'config',
-        defaults: {
-            filename: {
-                value: "lokijs.db",
-                required: true
-            },
-            collection: {
-                value: "",
-                required: true
-            }
-        },
-        label: function () {
-            return this.filename + " @ " + this.collection;
-        }
-    });
+  "use strict";
+  /*global RED*/
+  RED.nodes.registerType('lokijs-config', {
+    category: 'config',
+    defaults: {
+      filename: {
+        value: "lokijs.db",
+        required: true
+      },
+      collection: {
+        value: "",
+        required: true
+      }
+    },
+    label: function () {
+      return this.filename + " @ " + this.collection;
+    }
+  });
 
 </script>
 
 <script type="text/x-red" data-template-name="lokijs-config">
-    <div class="form-row">
-        <label for="node-config-input-filename"><i class="fa fa-globe"></i> Filename</label>
-        <input type="text" id="node-config-input-filename">
-    </div>
-    <div class="form-row">
-        <label for="node-config-input-collection"><i class="fa fa-config"></i> Collection</label>
-        <input type="text" id="node-config-input-collection">
-    </div>
+  <div class="form-row">
+    <label for="node-config-input-filename"><i class="fa fa-globe"></i> Filename</label>
+    <input type="text" id="node-config-input-filename">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-collection"><i class="fa fa-config"></i> Collection</label>
+    <input type="text" id="node-config-input-collection">
+  </div>
 </script>
 
 <script type="text/javascript">
-    /*global RED*/
-    RED.nodes.registerType('lokijs-op', {
-        category: 'storage',
-        inputs: 1,
-        outputs: 1,
-        color: "#22ee22",
-        icon: "db.png",
-        paletteLabel: "lokijs in",
-        defaults: {
-            config: {
-                value: "",
-                type: "lokijs-config"
-            },
-            method: {
-                value: "",
-                required: true
-            },
-            name: {
-                value: ""
-            },
-            input: {
-                value: ""
-            }
-        },
-        label: function () {
-            return this.name || "lokijs " + this.method;
-        },
-        oneditprepare: function () {
-            $("#node-input-typed-input").typedInput({ types: ['msg', { value: "full", label: RED._("node-red:debug.msgobj"), hasValue: false }] });
-            if (this.input === "true" || this.input === true) {
-                // show input message object
-                $("#node-input-typed-input").typedInput('type', 'full');
-            } else {
-                var property = (!this.input || (this.input === "false")) ? "payload" : this.input + "";
-                $("#node-input-typed-input").typedInput('type', 'msg');
-                $("#node-input-typed-input").typedInput('value', property);
-            }
-            $("#node-input-typed-input").on('change', function () {
-                if ($("#node-input-typed-input").typedInput('type') === 'msg'
-                    &&
-                    $("#node-input-typed-input").typedInput('value') === ''
-                ) {
-                    $("#node-input-typed-input").typedInput('value', 'payload');
-                }
-            });
-        },
-        oneditsave: function () {
-            var type = $("#node-input-typed-input").typedInput('type');
-            if (type === 'full') {
-                $("#node-input-input").val("true");
-            } else {
-                $("#node-input-input").val($("#node-input-typed-input").typedInput('value'));
-            }
+  /*global RED*/
+  RED.nodes.registerType('lokijs-op', {
+    category: 'storage',
+    inputs: 1,
+    outputs: 1,
+    color: "#22ee22",
+    icon: "db.png",
+    paletteLabel: "lokijs in",
+    defaults: {
+      config: {
+        value: "",
+        type: "lokijs-config"
+      },
+      method: {
+        value: "",
+        required: true
+      },
+      name: {
+        value: ""
+      },
+      input: {
+        value: ""
+      }
+    },
+    label: function () {
+      return this.name || "lokijs " + this.method;
+    },
+    oneditprepare: function () {
+      $("#node-input-typed-input").typedInput({ types: ['msg', { value: "full", label: RED._("node-red:debug.msgobj"), hasValue: false }] });
+      if (this.input === "true" || this.input === true) {
+        // show input message object
+        $("#node-input-typed-input").typedInput('type', 'full');
+      } else {
+        var property = (!this.input || (this.input === "false")) ? "payload" : this.input + "";
+        $("#node-input-typed-input").typedInput('type', 'msg');
+        $("#node-input-typed-input").typedInput('value', property);
+      }
+      $("#node-input-typed-input").on('change', function () {
+        if ($("#node-input-typed-input").typedInput('type') === 'msg'
+          &&
+          $("#node-input-typed-input").typedInput('value') === ''
+        ) {
+          $("#node-input-typed-input").typedInput('value', 'payload');
         }
-    });
+      });
+    },
+    oneditsave: function () {
+      var type = $("#node-input-typed-input").typedInput('type');
+      if (type === 'full') {
+        $("#node-input-input").val("true");
+      } else {
+        $("#node-input-input").val($("#node-input-typed-input").typedInput('value'));
+      }
+    }
+  });
 
 </script>
 
 <script type="text/x-red" data-template-name="lokijs-op">
-    <div class="form-row">
-        <label for="node-input-config"><i class="fa fa-globe"></i> Config</label>
-        <input type="text" id="node-input-config" placeholder="Config">
-    </div>
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
-    </div>
-    <div class="form-row">
-        <label for="node-input-method"><i class="fa fa-wrench"></i> Method</label>
-        <select id="node-input-method">
-            <option value="find" selected>FIND</option>
-            <option value="insert">INSERT</option>
-        </select>
-    </div>
-    <div class="form-row">
-        <label for="node-input-typed-input"><i class="fa fa-list"></i> Input</label>
-        <input id="node-input-typed-input" type="text" style="width: 70%">
-        <input id="node-input-input" type="hidden">
-    </div>
+  <div class="form-row">
+    <label for="node-input-config"><i class="fa fa-globe"></i> Config</label>
+    <input type="text" id="node-input-config" placeholder="Config">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-method"><i class="fa fa-wrench"></i> Method</label>
+    <select id="node-input-method">
+      <option value="find" selected>FIND</option>
+      <option value="insert">INSERT</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-typed-input"><i class="fa fa-list"></i> Input</label>
+    <input id="node-input-typed-input" type="text" style="width: 70%">
+    <input id="node-input-input" type="hidden">
+  </div>
 </script>
 
 <script type="text/x-red" data-help-name="lokijs-op">
-    <p>lokijs in</p>
-    <p>Executes a LokiJS method</p>
-    <p>Implemented methods:</p>
-    <p>- FIND</p>
-    <p>- INSERT</p>
+  <p>lokijs in</p>
+  <p>Executes a LokiJS method</p>
+  <p>Implemented methods:</p>
+  <p>- FIND</p>
+  <p>- INSERT</p>
 </script>
