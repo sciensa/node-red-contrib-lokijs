@@ -1,0 +1,33 @@
+{
+  "name": "node-red-contrib-lokijs",
+  "version": "0.1.0",
+  "description": "",
+  "keywords": [
+    "node-red",
+    "lokijs"
+  ],
+  "node-red": {
+    "version": ">=0.11.0",
+    "nodes": {
+      "lokijs": "lokijs.js"
+    }
+  },
+  "license": "MIT",
+  "author": "Sciensa Consulting <sciensa@sciensa.com> (http://github.com/sciensa)",
+  "contributors": [
+    "Aline Castro <aline.castro@sciensa.com> (http://github.com/alinecastro33)",
+    "Gabriel Carmelo Noguchi <gabriel.noguchi@sciensa.com> (http://github.com/gnoguchi)",
+    "Ian Nagano <ian.nagano@sciensa.com> (http://github.com/ianngn)",
+    "Rogério R. Alcântara <rogerio.alcantara@sciensa.com> (http://github.com/roalcantara)",
+    "Valter Junior <valter.junior@sciensa.com> (http://github.com/valterjnr)"
+  ],
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.3.0"
+  },
+  "dependencies": {
+    "i18next-client": "1.10.3",
+    "lokijs": "1.5.0"
+  }
+}
