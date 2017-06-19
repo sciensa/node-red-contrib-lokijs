@@ -1,14 +1,14 @@
 # node-red-contrib-lokijs
 A [Node-Red](http://nodered.org) node for object storage with [LokiJS](http://lokijs.org)
 
+[![NodeRed](https://img.shields.io/badge/Node--Red-0.16.2-red.svg)](http://nodered.org)
+[![NodeJS](https://img.shields.io/badge/Node.js-6.10.2-brightgreen.svg)](https://nodejs.org)
+[![ESLint](https://img.shields.io/badge/codestyle-eslint-green.svg)](http://eslint.org)
+
 Currently implemented methods:
 
 - FIND
 - INSERT
-
-[![NodeRed](https://img.shields.io/badge/Node--Red-0.16.2-red.svg)](http://nodered.org)
-[![NodeJS](https://img.shields.io/badge/Node.js-6.10.2-brightgreen.svg)](https://nodejs.org)
-[![ESLint](https://img.shields.io/badge/codestyle-eslint-green.svg)](http://eslint.org)
 
 ## Pre-requisites
 
