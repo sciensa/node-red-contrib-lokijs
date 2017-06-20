@@ -114,9 +114,16 @@
 </script>
 
 <script type="text/x-red" data-help-name="lokijs-op">
-  <p>lokijs in</p>
-  <p>Executes a LokiJS method</p>
-  <p>Implemented methods:</p>
-  <p>- FIND</p>
-  <p>- INSERT</p>
+  <p>Calls a LokiJS collection method.</p>
+  <p>Currently implemented methods:</p>
+  <ul>
+    <li>FIND</li>
+    <li>INSERT</li>
+  </ul>
+  <br>
+  <p>Please see <a href="http://lokijs.org"><i>LokiJS.org</i></a> for more information</p>
+  <p>The result will be returned in <b>msg.payload</b>.</p>
+  <p>If the complete <b>msg</b> object is used as input to an INSERT call, the result will be returned in <b>msg</b> instead.</p>
+  <p>The INSERT method only works in-memory and does NOT save to file. The filename is currently only used to instantiate the
+    DB class.</p>
 </script>
