@@ -54,7 +54,6 @@ module.exports = (RED) => {
           message.payload = coll.find(input);
           delete message.payload.meta;
           delete message.payload.$loki;
-          nd.send(message);
         } else if (nd.method === 'insert') {
           if (nd.input === 'true') {
             message = coll.insert(input);
@@ -65,8 +64,8 @@ module.exports = (RED) => {
             delete message.payload.meta;
             delete message.payload.$loki;
           }
-          nd.send(msg);
         }
+        nd.send(message);
       });
     };
     if (node.config) {
