@@ -48,23 +48,25 @@ module.exports = (RED) => {
           }
         }
 
-        let message = msg;
+        let message = Object.assign({}, msg);
 
         if (nd.method === 'find') {
           message.payload = coll.find(input);
-          delete message.payload.meta;
-          delete message.payload.$loki;
         } else if (nd.method === 'insert') {
           if (nd.input === 'true') {
-            message = coll.insert(input);
-            delete message.meta;
-            delete message.$loki;
+            message = Object.assign({}, coll.insert(input));
           } else {
             message.payload = coll.insert(input);
-            delete message.payload.meta;
-            delete message.payload.$loki;
           }
+        } else if (nd.method === 'findandremove') {
+          message.payload = coll.find(input);
+          coll.chain().find(input).remove();
         }
+        // remove meta and $loki elements from payload
+        delete message.payload.meta;
+        delete message.payload.$loki;
+        delete message.meta;
+        delete message.$loki;
         nd.send(message);
       });
     };
