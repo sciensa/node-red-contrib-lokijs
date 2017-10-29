@@ -7,19 +7,33 @@
 const Loki = require('lokijs');
 
 module.exports = (RED) => {
+
+  function loadCollection(lokidb, config) {
+    let coll = lokidb.getCollection(config.collection);
+    if (!coll) {
+      coll = lokidb.addCollection(config.collection);
+    }
+    config.coll = coll;
+  }
+
   function init(config) {
-    const lokidb = new Loki(config.filename, {
-      autoload: true,
-      autoloadCallback : function(){
-        let coll = lokidb.getCollection(config.collection);
-        if (!coll) {
-          coll = lokidb.addCollection(config.collection);
-        }
-		config.coll = coll;
-	  },
-      autosave: true, 
-      autosaveInterval: RED.settings.lokijsAutosaveInterval || 4000;
-    });
+    const redsettings = RED.settings.lokijs || {};
+    let lokidb;
+    if (redsettings.persistData) {
+      lokidb = new Loki(config.filename, {
+        autoload: true,
+        autoloadCallback : function(){
+          loadCollection(lokidb, config);
+          if (redsettings.callback){ redsettings.callback(config.coll) };
+        },
+        autosave: true, 
+        autosaveInterval: redsettings.autosaveInterval || 4000
+      });
+    }
+    else {
+      lokidb = new Loki(config.filename);
+      loadCollection(lokidb, config);
+    }
     return lokidb;
   }
 
