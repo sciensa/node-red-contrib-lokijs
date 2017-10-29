@@ -8,11 +8,18 @@ const Loki = require('lokijs');
 
 module.exports = (RED) => {
   function init(config) {
-    const lokidb = new Loki(config.filename);
-    let coll = lokidb.getCollection(config.collection);
-    if (!coll) {
-      coll = lokidb.addCollection(config.collection);
-    }
+    const lokidb = new Loki(config.filename, {
+      autoload: true,
+      autoloadCallback : function(){
+        let coll = lokidb.getCollection(config.collection);
+        if (!coll) {
+          coll = lokidb.addCollection(config.collection);
+        }
+		config.coll = coll;
+	  },
+      autosave: true, 
+      autosaveInterval: RED.settings.lokijsAutosaveInterval || 4000;
+    });
     return lokidb;
   }
 
@@ -32,10 +39,11 @@ module.exports = (RED) => {
     this.input = n.input;
     const node = this;
 
-    const connect = (nd) => {
-      const coll = nd.config.lokidb.getCollection(nd.config.collection);
+    const connect = (nd) => { 
 
       nd.on('input', (msg) => {
+        //const coll = nd.config.lokidb.getCollection(nd.config.collection);
+        const coll = node.config.coll;
         let input = {};
 
         if (nd.input === 'true') {
@@ -49,7 +57,6 @@ module.exports = (RED) => {
         }
 
         let message = Object.assign({}, msg);
-
         if (nd.method === 'find') {
           message.payload = coll.find(input);
         } else if (nd.method === 'insert') {
