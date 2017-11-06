@@ -18,6 +18,25 @@ Requires [Node-Red](http://nodered.org) version 0.16.2 or more recent.
 
     $ npm i -S node-red-contrib-lokijs
 
+## How to use it
+
+By default, the data remains in-memory only, so the filename that is set is only used to instantiate the DB class. If you want to persist the data in the storage you can configure it in the _settings.js_ file:
+
+```
+	lokijs: {
+		persistData: true,
+		autosaveInterval: 1000,
+		callback: function (collection) {
+			console.log("Collection loaded");
+		}
+	}
+```
+
+All this data is optional, and the meaning of each one is:
+*  **persistData**: flag to activate the data persistance. Default value _false_
+*  **autosaveInterval**: only used when _persistData_ is active. Time interval (in milliseconds) between saves. Default value _4000_
+*  **callback**: function that is called when the collection is loaded
+
 ## Development
 
 ##### 1. Clone the project
@@ -35,7 +54,7 @@ Requires [Node-Red](http://nodered.org) version 0.16.2 or more recent.
 ##### 4. Link the project
 
     $ npm link
-    
+
 ##### 5. Run the node-red and check the node out
 
 ## Contributing
