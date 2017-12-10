@@ -26,7 +26,7 @@ module.exports = (RED) => {
           loadCollection(lokidb, config);
           if (redsettings.callback){ redsettings.callback(config.coll) };
         },
-        autosave: true, 
+        autosave: true,
         autosaveInterval: redsettings.autosaveInterval || 4000
       });
     }
@@ -45,6 +45,27 @@ module.exports = (RED) => {
   }
   RED.nodes.registerType('lokijs-config', lokijsConfig);
 
+  function outputBeautifier(resultset) {
+    resultset = resultset || {};
+    // remove meta and $loki elements from payload
+    if (resultset.length) {
+      let rtn = [];
+      resultset.forEach(function(v, i){
+        let element = Object.assign({}, v);
+        delete element.meta;
+        delete element.$loki;
+        rtn.push(element);
+      });
+      return rtn;
+    }
+    else {
+      let rtn = Object.assign({}, resultset);
+      delete rtn.meta;
+      delete rtn.$loki;
+      return rtn;
+    }
+  }
+
   function lokijsOp(n) {
     RED.nodes.createNode(this, n);
     this.config = RED.nodes.getNode(n.config);
@@ -53,7 +74,7 @@ module.exports = (RED) => {
     this.input = n.input;
     const node = this;
 
-    const connect = (nd) => { 
+    const connect = (nd) => {
 
       nd.on('input', (msg) => {
         //const coll = nd.config.lokidb.getCollection(nd.config.collection);
@@ -72,22 +93,17 @@ module.exports = (RED) => {
 
         let message = Object.assign({}, msg);
         if (nd.method === 'find') {
-          message.payload = coll.find(input);
+          message.payload = outputBeautifier(coll.find(input));
         } else if (nd.method === 'insert') {
           if (nd.input === 'true') {
-            message = Object.assign({}, coll.insert(input));
+            message = outputBeautifier(coll.insert(input));
           } else {
-            message.payload = coll.insert(input);
+            message.payload = outputBeautifier(coll.insert(input));
           }
         } else if (nd.method === 'findandremove') {
-          message.payload = coll.find(input);
+          message.payload = outputBeautifier(coll.find(input));
           coll.chain().find(input).remove();
         }
-        // remove meta and $loki elements from payload
-        delete message.payload.meta;
-        delete message.payload.$loki;
-        delete message.meta;
-        delete message.$loki;
         nd.send(message);
       });
     };
